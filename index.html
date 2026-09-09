@@ -1,1 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
+<title>Nursing Internship – 30 Day Refresher</title>
 
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f1f5f9;
+    color:#0f172a;
+}
+
+header{
+    background:#0f172a;
+    color:white;
+    padding:25px 18px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.header{
+    max-width:1100px;
+    margin:auto;
+}
+
+h1{
+    margin:0 0 8px;
+    font-size:27px;
+}
+
+.subtitle{
+    opacity:.8;
+    line-height:1.5;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+.progress-box{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.07);
+}
+
+.progress-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+    font-weight:bold;
+}
+
+.progress{
+    height:13px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#2563eb;
+    transition:.3s;
+}
+
+.controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+input,select{
+    padding:13px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    background:white;
+    font-size:15px;
+}
+
+input{
+    flex:1;
+    min-width:220px;
+}
+
+.days{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:16px;
+}
+
+.day-card{
+    background:white;
+    border-radius:16px;
+    padding:18px;
+    box-shadow:0 3px 12px rgba(0,0,0,.07);
+    border:2px solid transparent;
+    transition:.2s;
+}
+
+.day-card:hover{
+    transform:translateY(-2px);
+}
+
+.day-card.done{
+    border-color:#16a34a;
+}
+
+.day-number{
+    font-size:14px;
+    font-weight:bold;
+    color:#2563eb;
+    margin-bottom:7px;
+}
+
+.day-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:10px;
+    line-height:1.35;
+}
+
+.week{
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:12px;
+}
+
+.topic{
+    line-height:1.55;
+    color:#334155;
+    min-height:70px;
+}
+
+.buttons{
+    display:flex;
+    gap:8px;
+    margin-top:15px;
+}
+
+button{
+    border:0;
+    border-radius:10px;
+    padding:11px 14px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.details{
+    background:#2563eb;
+    color:white;
+    flex:1;
+}
+
+.complete{
+    background:#e2e8f0;
+    color:#0f172a;
+}
+
+.done .complete{
+    background:#16a34a;
+    color:white;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    z-index:50;
+    padding:20px;
+    overflow:auto;
+}
+
+.modal-box{
+    background:white;
+    max-width:750px;
+    margin:30px auto;
+    border-radius:18px;
+    padding:25px;
+}
+
+.close{
+    float:right;
+    background:#e2e8f0;
+}
+
+.modal h2{
+    margin-top:0;
+    padding-right:50px;
+}
+
+.section{
+    margin-top:20px;
+}
+
+.section h3{
+    margin-bottom:8px;
+    color:#1d4ed8;
+}
+
+.section ul{
+    line-height:1.7;
+    padding-left:22px;
+}
+
+.scenario{
+    background:#f8fafc;
+    padding:15px;
+    border-radius:12px;
+    line-height:1.6;
+}
+
+.reset{
+    background:#dc2626;
+    color:white;
+}
+
+footer{
+    text-align:center;
+    color:#64748b;
+    padding:35px 20px;
+    line-height:1.6;
+}
+
+@media(max-width:600px){
+    .container{padding:14px}
+    h1{font-size:23px}
+    .days{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header">
+<h1>🩺 Nursing Internship</h1>
+<div class="subtitle">
+30-Day Nursing Refresher<br>
+Knowledge → Clinical Skill → Clinical Judgment → Safe Practice
+</div>
+</div>
+</header>
+
+<main class="container">
+
+<div class="progress-box">
+
+<div class="progress-top">
+<span>Overall Progress</span>
+<span id="progressText">0 / 30 Days</span>
+</div>
+
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+
+</div>
+
+<div class="controls">
+
+<input
+id="search"
+type="search"
+placeholder="Search topics... e.g. COPD, IV, Assessment">
+
+<select id="weekFilter">
+<option value="all">All Weeks</option>
+<option value="1">Week 1 – Fundamentals</option>
+<option value="2">Week 2 – Assessment & Skills</option>
+<option value="3">Week 3 – Med-Surg & Emergencies</option>
+<option value="4">Week 4 – Clinical Judgment</option>
+</select>
+
+<button class="reset" onclick="resetProgress()">Reset Progress</button>
+
+</div>
+
+<div class="days" id="days"></div>
+
+</main>
+
+<div class="modal" id="modal">
+<div class="modal-box">
+
+<button class="close" onclick="closeModal()">✕</button>
+
+<h2 id="modalTitle"></h2>
+
+<div id="modalContent"></div>
+
+</div>
+</div>
+
+<footer>
+Nursing Internship 30-Day Refresher<br>
+Educational use only — always follow your hospital policy, clinical instructor and local protocols.
+</footer>
+
+<script>
+
+const days = [
+
+{
+day:1,
+week:1,
+title:"Assessment + ABCDE + Vital Signs + Patient Safety",
+topic:"Start with the patient: General Survey, ABCDE assessment, vital signs and immediate safety.",
+content:{
+objectives:[
+"Understand the first approach to a patient.",
+"Recognize life-threatening problems using ABCDE.",
+"Measure and interpret basic vital signs.",
+"Identify immediate Patient Safety risks."
+],
+skills:[
+"General Survey",
+"Blood Pressure",
+"Pulse",
+"Respiratory Rate",
+"Temperature",
+"SpO₂",
+"ABCDE assessment"
+],
+mustKnow:[
+"A — Airway",
+"B — Breathing",
+"C — Circulation",
+"D — Disability",
+"E — Exposure",
+"Always identify the patient correctly.",
+"Check allergies before medication.",
+"Look for deterioration, not only abnormal numbers."
+],
+scenario:"A patient suddenly becomes confused and short of breath. Do not start by completing a routine head-to-toe assessment. Think ABCDE first and escalate appropriately."
+}
+},
+
+{
+day:2,
+week:1,
+title:"Nursing Process + Documentation + Nursing Notes",
+topic:"ADPIE, clinical documentation, nursing notes and accurate communication.",
+content:{
+objectives:[
+"Understand ADPIE.",
+"Document objective and accurate findings.",
+"Distinguish observation from interpretation.",
+"Communicate important changes."
+],
+skills:[
+"Assessment",
+"Diagnosis",
+"Planning",
+"Implementation",
+"Evaluation",
+"Nursing Notes"
+],
+mustKnow:[
+"Assessment comes first.",
+"Documentation should be accurate, objective and timely.",
+"Never document an intervention before performing it.",
+"Use approved abbreviations only."
+],
+scenario:"You notice a patient's respiratory rate increased from 18 to 30/min. Document the finding accurately and assess the patient rather than simply writing 'patient is bad.'"
+}
+},
+
+{
+day:3,
+week:1,
+title:"Infection Control + Hand Hygiene + PPE",
+topic:"Standard Precautions, hand hygiene, PPE and Transmission-Based Precautions.",
+content:{
+objectives:[
+"Understand when to perform hand hygiene.",
+"Choose appropriate PPE.",
+"Understand Standard Precautions.",
+"Recognize contact, droplet and airborne precautions."
+],
+skills:[
+"Hand Hygiene",
+"Donning PPE",
+"Doffing PPE",
+"Standard Precautions",
+"Transmission-Based Precautions"
+],
+mustKnow:[
+"Hand hygiene is one of the most important infection-prevention measures.",
+"Use Standard Precautions for all patients.",
+"Additional precautions depend on the suspected or confirmed infection.",
+"Follow hospital isolation policy."
+],
+scenario:"Before touching a patient, perform the appropriate hand hygiene. If contact with body fluids is anticipated, select PPE based on the expected exposure."
+}
+},
+
+{
+day:4,
+week:1,
+title:"Positioning + Mobility + Transfer + Falls",
+topic:"Safe positioning, transfers, ambulation and fall prevention.",
+content:{
+objectives:[
+"Position patients safely.",
+"Perform safe transfers.",
+"Identify fall risks.",
+"Protect both patient and nurse from injury."
+],
+skills:[
+"Bed mobility",
+"Transfer bed to chair",
+"Ambulation",
+"Fall prevention",
+"Use of assistive devices"
+],
+mustKnow:[
+"Assess patient's mobility before moving them.",
+"Use proper body mechanics.",
+"Lock wheels before transfer.",
+"Do not rush an unstable patient."
+],
+scenario:"An older patient says they feel dizzy when standing. Stop the transfer, return them to a safe position and reassess rather than forcing ambulation."
+}
+},
+
+{
+day:5,
+week:1,
+title:"Hygiene + Oral Care + Bed Bath + Pressure Injury Prevention",
+topic:"Basic hygiene while maintaining dignity, privacy and skin integrity.",
+content:{
+objectives:[
+"Provide safe personal hygiene.",
+"Perform oral care appropriately.",
+"Prevent pressure injuries.",
+"Assess skin condition."
+],
+skills:[
+"Bed Bath",
+"Oral Care",
+"Perineal Care",
+"Skin Assessment",
+"Pressure Injury Prevention"
+],
+mustKnow:[
+"Maintain privacy and dignity.",
+"Inspect skin during care.",
+"Keep skin clean and dry.",
+"Reposition according to patient condition and facility policy."
+],
+scenario:"A bedbound patient has redness over the sacral area. Assess the skin, reduce pressure and report concerning findings according to policy."
+}
+},
+
+{
+day:6,
+week:1,
+title:"Intake & Output + Fluid Balance + Nutrition + Enteral Feeding",
+topic:"Measure fluid intake/output and understand basic nutritional support.",
+content:{
+objectives:[
+"Calculate intake and output.",
+"Recognize fluid imbalance.",
+"Understand basic feeding safety.",
+"Understand enteral feeding principles."
+],
+skills:[
+"Intake measurement",
+"Urine output measurement",
+"I&O chart",
+"Oral feeding",
+"Enteral feeding basics"
+],
+mustKnow:[
+"Include appropriate measurable fluids in intake.",
+"Record output accurately.",
+"Monitor trends, not only one number.",
+"Follow local policy for tube feeding verification and administration."
+],
+scenario:"A patient has decreasing urine output and increasing edema. Think about fluid balance and assess further rather than looking at one measurement in isolation."
+}
+},
+
+{
+day:7,
+week:1,
+title:"Urinary & Bowel Elimination + Catheter Care + Specimens",
+topic:"Elimination assessment, catheter care and safe specimen collection.",
+content:{
+objectives:[
+"Assess normal and abnormal elimination.",
+"Provide catheter care.",
+"Collect specimens correctly.",
+"Recognize infection risks."
+],
+skills:[
+"Urinary assessment",
+"Bowel assessment",
+"Catheter care",
+"Urine specimen",
+"Stool specimen"
+],
+mustKnow:[
+"Maintain a closed urinary drainage system when applicable.",
+"Keep drainage bag below bladder level.",
+"Use aseptic technique according to procedure.",
+"Label specimens correctly."
+],
+scenario:"A urinary catheter patient develops fever and cloudy urine. Assess the patient and report possible infection rather than assuming the catheter is the only cause."
+}
+},
+
+{
+day:8,
+week:2,
+title:"Head-to-Toe Assessment + General Survey",
+topic:"Systematic physical assessment and recognizing abnormal findings.",
+content:{
+objectives:[
+"Perform a structured assessment.",
+"Recognize normal versus abnormal findings.",
+"Prioritize abnormal findings.",
+"Develop clinical judgment."
+],
+skills:[
+"General Survey",
+"Inspection",
+"Palpation",
+"Percussion",
+"Auscultation",
+"Head-to-Toe Assessment"
+],
+mustKnow:[
+"Compare findings when appropriate.",
+"Assess the patient before focusing only on the disease.",
+"Unexpected changes require reassessment."
+],
+scenario:"A patient looks pale, sweaty and anxious. Even if their chart diagnosis is unrelated, these findings should trigger further assessment."
+}
+},
+
+{
+day:9,
+week:2,
+title:"Respiratory Assessment + Oxygen Therapy + Suctioning",
+topic:"Respiratory assessment, oxygen devices and basic suctioning principles.",
+content:{
+objectives:[
+"Assess respiratory status.",
+"Recognize respiratory distress.",
+"Understand common oxygen devices.",
+"Understand suctioning precautions."
+],
+skills:[
+"Respiratory assessment",
+"SpO₂ monitoring",
+"Nasal cannula",
+"Simple mask",
+"Non-rebreather mask",
+"Suctioning basics"
+],
+mustKnow:[
+"Look at the patient, not just the SpO₂.",
+"Assess work of breathing.",
+"Check oxygen equipment and prescribed flow.",
+"Follow facility protocol for suctioning."
+],
+scenario:"A patient is using accessory muscles and cannot speak full sentences. This is a red flag requiring immediate assessment and escalation."
+}
+},
+
+{
+day:10,
+week:2,
+title:"Cardiovascular + Peripheral Vascular Assessment",
+topic:"Heart sounds, pulse, capillary refill, edema and peripheral circulation.",
+content:{
+objectives:[
+"Assess cardiovascular status.",
+"Check peripheral pulses.",
+"Recognize signs of poor perfusion.",
+"Identify edema and circulation changes."
+],
+skills:[
+"Heart assessment",
+"Pulse assessment",
+"Capillary refill",
+"Edema assessment",
+"Peripheral vascular assessment"
+],
+mustKnow:[
+"Assess rate and rhythm.",
+"Compare peripheral pulses when appropriate.",
+"New chest pain is a priority finding.",
+"Sudden unilateral swelling can be significant."
+],
+scenario:"A patient develops new chest pressure with sweating. Prioritize immediate assessment and escalation."
+}
+},
+
+{
+day:11,
+week:2,
+title:"Neurological Assessment + LOC + GCS",
+topic:"Level of consciousness, pupils, motor function and Glasgow Coma Scale.",
+content:{
+objectives:[
+"Assess neurological status.",
+"Recognize acute changes in LOC.",
+"Understand basic GCS components.",
+"Identify neurological emergencies."
+],
+skills:[
+"LOC assessment",
+"Pupil assessment",
+"Motor assessment",
+"GCS basics",
+"Neurological observations"
+],
+mustKnow:[
+"Acute change in mental status is important.",
+"GCS evaluates Eye, Verbal and Motor responses.",
+"Compare current status with baseline."
+],
+scenario:"A patient who was alert becomes difficult to wake. Treat this as an acute change requiring immediate assessment."
+}
+},
+
+{
+day:12,
+week:2,
+title:"Abdominal + GI Assessment",
+topic:"Inspection, auscultation, percussion and palpation of the abdomen.",
+content:{
+objectives:[
+"Perform basic abdominal assessment.",
+"Assess bowel function.",
+"Recognize concerning symptoms.",
+"Understand nausea, vomiting and GI bleeding."
+],
+skills:[
+"Abdominal inspection",
+"Auscultation",
+"Palpation",
+"Bowel assessment"
+],
+mustKnow:[
+"Follow the appropriate abdominal assessment sequence.",
+"Assess pain characteristics.",
+"Monitor vomiting and stool characteristics.",
+"Report signs of GI bleeding."
+],
+scenario:"A patient reports severe abdominal pain with rigid abdomen. This requires prompt assessment and escalation."
+}
+},
+
+{
+day:13,
+week:2,
+title:"Musculoskeletal + Skin Assessment",
+topic:"Mobility, strength, joints, skin integrity and wounds.",
+content:{
+objectives:[
+"Assess movement and strength.",
+"Assess skin integrity.",
+"Recognize wound complications.",
+"Prevent pressure injuries."
+],
+skills:[
+"Muscle strength",
+"ROM assessment",
+"Skin assessment",
+"Wound observation"
+],
+mustKnow:[
+"Assess baseline mobility.",
+"Look for redness, breakdown, drainage and swelling.",
+"Document wound characteristics objectively."
+],
+scenario:"A wound suddenly has increased drainage and surrounding redness. Assess and report possible infection."
+}
+},
+
+{
+day:14,
+week:2,
+title:"Full Assessment Practice + Weekly Clinical Review",
+topic:"Combine assessment skills into one systematic patient assessment.",
+content:{
+objectives:[
+"Perform a complete assessment.",
+"Prioritize abnormal findings.",
+"Practice clinical communication.",
+"Review Week 1 and Week 2."
+],
+skills:[
+"Full head-to-toe assessment",
+"Vital signs",
+"ABCDE",
+"Documentation",
+"SBAR basics"
+],
+mustKnow:[
+"Assessment should be systematic.",
+"Life-threatening problems take priority.",
+"Trend changes over time.",
+"Escalate deterioration."
+],
+scenario:"Perform a complete assessment but remember: if the patient deteriorates during assessment, stop the routine sequence and return to ABCDE."
+}
+},
+
+{
+day:15,
+week:3,
+title:"Cardiovascular: HTN + HF + IHD + MI + Arrhythmias + Shock",
+topic:"Major cardiovascular conditions and nursing priorities.",
+content:{
+objectives:[
+"Understand common cardiovascular disorders.",
+"Recognize heart failure signs.",
+"Recognize acute coronary syndrome red flags.",
+"Understand shock as a life-threatening state."
+],
+skills:[
+"Cardiac assessment",
+"Chest pain assessment",
+"Edema assessment",
+"ECG awareness",
+"Shock recognition"
+],
+mustKnow:[
+"Chest pain with concerning symptoms requires urgent evaluation.",
+"Heart failure may cause dyspnea and edema.",
+"Shock means inadequate tissue perfusion.",
+"Do not delay escalation of unstable patients."
+],
+scenario:"A patient has chest pain, diaphoresis and shortness of breath. Prioritize immediate assessment and emergency response according to protocol."
+}
+},
+
+{
+day:16,
+week:3,
+title:"Respiratory: COPD + Asthma + Pneumonia + Respiratory Failure",
+topic:"Common respiratory diseases and recognition of respiratory deterioration.",
+content:{
+objectives:[
+"Differentiate common respiratory problems.",
+"Recognize respiratory distress.",
+"Understand basic oxygen therapy.",
+"Recognize respiratory failure red flags."
+],
+skills:[
+"Respiratory assessment",
+"Oxygen therapy",
+"Inhaler/nebulizer awareness",
+"Suctioning"
+],
+mustKnow:[
+"Severe respiratory distress is an emergency.",
+"Monitor respiratory rate, effort, mental status and oxygenation.",
+"Follow prescribed oxygen targets and local protocol."
+],
+scenario:"A COPD patient becomes increasingly drowsy with worsening breathing. Do not assume this is normal COPD; reassess and escalate."
+}
+},
+
+{
+day:17,
+week:3,
+title:"Neuro + Endocrine: Stroke + Seizures + Diabetes + DKA + Thyroid",
+topic:"Neurological and endocrine emergencies.",
+content:{
+objectives:[
+"Recognize stroke signs.",
+"Respond safely to seizures.",
+"Recognize hypoglycemia.",
+"Understand DKA basics."
+],
+skills:[
+"Neurological assessment",
+"Blood glucose monitoring",
+"Seizure safety",
+"Stroke recognition"
+],
+mustKnow:[
+"Stroke symptoms require rapid action.",
+"During seizure protect the patient from injury.",
+"Do not put objects in a seizing patient's mouth.",
+"Hypoglycemia can cause confusion, sweating and altered consciousness.",
+"DKA is a medical emergency."
+],
+scenario:"A diabetic patient is sweating, shaky and confused. Check blood glucose promptly according to protocol and respond to hypoglycemia."
+}
+},
+
+{
+day:18,
+week:3,
+title:"Renal + Fluid & Electrolytes: AKI + CKD + Na/K",
+topic:"Kidney function, fluid balance and major electrolyte disturbances.",
+content:{
+objectives:[
+"Understand AKI and CKD basics.",
+"Recognize fluid imbalance.",
+"Understand major sodium and potassium abnormalities.",
+"Recognize dangerous findings."
+],
+skills:[
+"I&O monitoring",
+"Electrolyte awareness",
+"Edema assessment",
+"Renal assessment"
+],
+mustKnow:[
+"Potassium abnormalities can cause dangerous cardiac effects.",
+"Monitor urine output.",
+"Fluid status includes intake, output, weight and clinical signs.",
+"Follow lab and medication protocols."
+],
+scenario:"A patient with renal disease develops weakness and an abnormal potassium result. Recognize the potential cardiac risk and escalate appropriately."
+}
+},
+
+{
+day:19,
+week:3,
+title:"GI + Hematology + Oncology + Musculoskeletal",
+topic:"GI bleeding, cirrhosis, anemia, oncology basics and fractures.",
+content:{
+objectives:[
+"Recognize GI bleeding.",
+"Understand anemia manifestations.",
+"Understand basic cirrhosis complications.",
+"Provide safe care for fractures."
+],
+skills:[
+"Bleeding assessment",
+"Pain assessment",
+"Fracture precautions",
+"Anemia assessment"
+],
+mustKnow:[
+"GI bleeding can cause shock.",
+"Anemia may cause fatigue, pallor and dyspnea.",
+"Fractured limbs require neurovascular assessment.",
+"Monitor cancer patients for treatment complications."
+],
+scenario:"A patient with a suspected fracture has increasing pain and numbness distal to the injury. Perform neurovascular assessment and escalate."
+}
+},
+
+{
+day:20,
+week:3,
+title:"Medication Administration + Rights + Calculations + IV",
+topic:"Medication safety, routes, calculations and IV therapy.",
+content:{
+objectives:[
+"Apply medication rights.",
+"Perform basic dosage calculations.",
+"Understand oral, IM, SC and IV routes.",
+"Recognize medication errors."
+],
+skills:[
+"Medication identification",
+"Dosage calculation",
+"Oral medication",
+"SC injection",
+"IM injection",
+"IV medication basics",
+"IV cannula care"
+],
+mustKnow:[
+"Right patient.",
+"Right medication.",
+"Right dose.",
+"Right route.",
+"Right time.",
+"Right documentation.",
+"Check allergies and relevant parameters.",
+"Follow local medication policy."
+],
+scenario:"The medication label does not match the medication order. Stop and clarify before administration."
+}
+},
+
+{
+day:21,
+week:3,
+title:"Emergency Nursing + ABCDE + BLS/CPR",
+topic:"Immediate response to common emergencies.",
+content:{
+objectives:[
+"Apply ABCDE in emergencies.",
+"Recognize cardiac arrest.",
+"Understand BLS/CPR principles.",
+"Recognize anaphylaxis, bleeding, burns and acute respiratory distress."
+],
+skills:[
+"Emergency assessment",
+"BLS",
+"CPR",
+"Defibrillator awareness",
+"Bleeding control",
+"Burn first aid"
+],
+mustKnow:[
+"Recognize cardiac arrest rapidly.",
+"Activate emergency response.",
+"Start appropriate resuscitation according to current protocol.",
+"Follow AHA/local resuscitation guidelines and hospital policy."
+],
+scenario:"A patient is unresponsive and not breathing normally. Activate emergency response and begin the appropriate BLS sequence."
+}
+},
+
+{
+day:22,
+week:4,
+title:"SBAR + Handover + Documentation + Communication",
+topic:"Safe communication between nurses and healthcare professionals.",
+content:{
+objectives:[
+"Use SBAR.",
+"Give structured handover.",
+"Communicate deterioration.",
+"Document clearly."
+],
+skills:[
+"SBAR",
+"Nursing handover",
+"Documentation",
+"Patient communication"
+],
+mustKnow:[
+"S — Situation",
+"B — Background",
+"A — Assessment",
+"R — Recommendation",
+"Communicate urgent changes clearly.",
+"Do not hide or minimize important findings."
+],
+scenario:"Your patient suddenly develops hypotension. A useful handover includes the current situation, relevant history, assessment findings and what you need from the receiving clinician."
+}
+},
+
+{
+day:23,
+week:4,
+title:"Medication Safety + High-Alert Drugs + Adverse Reactions",
+topic:"Prevent medication errors and recognize adverse reactions.",
+content:{
+objectives:[
+"Understand high-alert medication risks.",
+"Recognize allergic reactions.",
+"Prevent administration errors.",
+"Understand double-checking policies."
+],
+skills:[
+"Medication safety check",
+"Allergy verification",
+"Adverse reaction recognition"
+],
+mustKnow:[
+"Never ignore an allergy.",
+"High-alert medications require extra caution.",
+"Follow independent double-check policies where required.",
+"Report medication errors immediately according to policy."
+],
+scenario:"A patient develops wheezing and facial swelling after medication administration. Treat this as a possible severe allergic reaction and activate emergency care."
+}
+},
+
+{
+day:24,
+week:4,
+title:"Hospital Emergencies + Red Flags + Escalation",
+topic:"Recognizing deterioration before it becomes a crisis.",
+content:{
+objectives:[
+"Recognize red flags.",
+"Know when to escalate.",
+"Use ABCDE.",
+"Think clinically rather than relying only on numbers."
+],
+skills:[
+"Early recognition",
+"ABCDE",
+"Escalation",
+"Rapid reassessment"
+],
+mustKnow:[
+"New confusion can be a red flag.",
+"Severe respiratory distress is a red flag.",
+"New chest pain is a red flag.",
+"Severe hypotension is a red flag.",
+"Rapid deterioration requires urgent escalation."
+],
+scenario:"A patient who was stable is suddenly confused, tachypneic and hypotensive. Do not wait for the next routine observation round."
+}
+},
+
+{
+day:25,
+week:4,
+title:"Clinical Judgment: Prioritization + What Comes First?",
+topic:"How to decide which patient or problem needs attention first.",
+content:{
+objectives:[
+"Prioritize life-threatening problems.",
+"Use ABCDE.",
+"Distinguish urgent from routine tasks.",
+"Think about risk."
+],
+skills:[
+"Prioritization",
+"Clinical reasoning",
+"Escalation"
+],
+mustKnow:[
+"Airway and breathing problems usually take priority.",
+"Unstable patients come before routine care.",
+"Acute changes matter.",
+"Do not choose based only on which task is easiest."
+],
+scenario:"Patient A needs routine medication. Patient B has severe respiratory distress. Patient B is the priority."
+}
+},
+
+{
+day:26,
+week:4,
+title:"Clinical Scenarios: Cardiovascular + Respiratory",
+topic:"Practice clinical judgment using common cardiovascular and respiratory cases.",
+content:{
+objectives:[
+"Interpret patient findings.",
+"Prioritize nursing actions.",
+"Recognize deterioration.",
+"Practice escalation."
+],
+skills:[
+"Assessment",
+"Prioritization",
+"SBAR",
+"Emergency response"
+],
+mustKnow:[
+"Always reassess after an intervention.",
+"Look for trends.",
+"Escalate when the patient's condition exceeds your scope or policy."
+],
+scenario:"A patient with heart failure develops sudden severe dyspnea and low oxygen saturation. Think respiratory distress, assess ABCDE and escalate."
+}
+},
+
+{
+day:27,
+week:4,
+title:"Clinical Scenarios: Neuro + Diabetes + Renal + GI",
+topic:"Integrated clinical judgment across multiple systems.",
+content:{
+objectives:[
+"Recognize acute neurological changes.",
+"Identify glucose emergencies.",
+"Recognize renal deterioration.",
+"Recognize GI bleeding."
+],
+skills:[
+"Focused assessment",
+"Glucose assessment",
+"Neurological assessment",
+"I&O assessment"
+],
+mustKnow:[
+"Acute confusion has many possible causes.",
+"Check glucose when clinically appropriate.",
+"Monitor urine output.",
+"Recognize bleeding early."
+],
+scenario:"A diabetic patient becomes confused and sweaty. Hypoglycemia should be considered and glucose should be checked promptly."
+}
+},
+
+{
+day:28,
+week:4,
+title:"Full Nursing Skills Checklist + Weak Areas",
+topic:"Review practical nursing skills and identify your weak areas.",
+content:{
+objectives:[
+"Review core skills.",
+"Identify weaknesses.",
+"Practice safe sequence.",
+"Prepare for clinical work."
+],
+skills:[
+"Hand hygiene",
+"PPE",
+"Vital signs",
+"Assessment",
+"Medication safety",
+"Documentation",
+"I&O",
+"Patient transfer",
+"Oxygen therapy"
+],
+mustKnow:[
+"Know the purpose of every procedure.",
+"Know when to stop.",
+"Know what findings require reporting.",
+"Follow hospital policy."
+],
+scenario:"Choose one weak skill and perform a mental walkthrough: preparation → patient identification → procedure → safety → documentation → escalation."
+}
+},
+
+{
+day:29,
+week:4,
+title:"Mock Clinical Assessment",
+topic:"Theory + scenarios + prioritization + nursing skills.",
+content:{
+objectives:[
+"Simulate a clinical assessment.",
+"Test clinical judgment.",
+"Practice communication.",
+"Find final weak areas."
+],
+skills:[
+"ABCDE",
+"Vital signs",
+"Head-to-toe assessment",
+"SBAR",
+"Medication safety",
+"Emergency response"
+],
+mustKnow:[
+"Do not panic when faced with an unfamiliar case.",
+"Start with safety and ABCDE.",
+"Gather information.",
+"Interpret findings.",
+"Act.",
+"Reassess."
+],
+scenario:"You receive a patient with multiple abnormal findings. Start with immediate safety and ABCDE, identify the most dangerous problem, act within scope and escalate."
+}
+},
+
+{
+day:30,
+week:4,
+title:"Final Comprehensive Review + Internship Survival Guide",
+topic:"Connect all 30 days into one clinical thinking framework.",
+content:{
+objectives:[
+"Review all major fundamentals.",
+"Build a clinical safety mindset.",
+"Identify permanent weak areas.",
+"Prepare for internship."
+],
+skills:[
+"Assessment",
+"Clinical judgment",
+"Patient safety",
+"Communication",
+"Documentation",
+"Emergency response"
+],
+mustKnow:[
+"Safety first.",
+"Assess before acting when possible.",
+"ABCDE for deterioration.",
+"Medication safety every time.",
+"Hand hygiene every time.",
+"Document accurately.",
+"Escalate early when concerned.",
+"Never perform a procedure beyond your training or authorization."
+],
+scenario:"Your goal is not to memorize every disease. Your goal is to recognize deterioration, assess systematically, act safely, communicate clearly and reassess."
+}
+}
+
+];
+
+const STORAGE_KEY="nursing30progress";
+
+let completed=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+
+function save(){
+localStorage.setItem(STORAGE_KEY,JSON.stringify(completed));
+}
+
+function updateProgress(){
+
+const count=completed.length;
+
+document.getElementById("progressText").textContent =
+count+" / 30 Days";
+
+document.getElementById("progressBar").style.width =
+(count/30*100)+"%";
+}
+
+function render(){
+
+const container=document.getElementById("days");
+const search=document.getElementById("search").value.toLowerCase();
+const week=document.getElementById("weekFilter").value;
+
+container.innerHTML="";
+
+days
+.filter(d=>{
+
+const text=
+(d.title+" "+d.topic+" "+JSON.stringify(d.content))
+.toLowerCase();
+
+const matchesSearch=text.includes(search);
+
+const matchesWeek=
+week==="all" || String(d.week)===week;
+
+return matchesSearch && matchesWeek;
+
+})
+.forEach(d=>{
+
+const done=completed.includes(d.day);
+
+const card=document.createElement("div");
+
+card.className="day-card"+(done?" done":"");
+
+card.innerHTML=`
+
+<div class="day-number">DAY ${d.day}</div>
+
+<div class="day-title">${d.title}</div>
+
+<div class="week">Week ${d.week}</div>
+
+<div class="topic">${d.topic}</div>
+
+<div class="buttons">
+
+<button class="details"
+onclick="openModal(${d.day})">
+Details
+</button>
+
+<button class="complete"
+onclick="toggleDay(${d.day})">
+${done?"✓ Completed":"Mark Complete"}
+</button>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+updateProgress();
+}
+
+function toggleDay(day){
+
+if(completed.includes(day)){
+
+completed=completed.filter(x=>x!==day);
+
+}else{
+
+completed.push(day);
+
+}
+
+save();
+render();
+}
+
+function openModal(day){
+
+const d=days.find(x=>x.day===day);
+
+document.getElementById("modalTitle").textContent=
+"Day "+d.day+" — "+d.title;
+
+let html="";
+
+html+=`
+
+<div class="section">
+
+<h3>🎯 Objectives</h3>
+
+<ul>
+${d.content.objectives.map(x=>`<li>${x}</li>`).join("")}
+</ul>
+
+</div>
+
+`;
+
+html+=`
+
+<div class="section">
+
+<h3>🩺 Nursing Skills</h3>
+
+<ul>
+${d.content.skills.map(x=>`<li>${x}</li>`).join("")}
+</ul>
+
+</div>
+
+`;
+
+html+=`
+
+<div class="section">
+
+<h3>⭐ Must Know</h3>
+
+<ul>
+${d.content.mustKnow.map(x=>`<li>${x}</li>`).join("")}
+</ul>
+
+</div>
+
+`;
+
+html+=`
+
+<div class="section">
+
+<h3>🚨 Clinical Scenario</h3>
+
+<div class="scenario">
+
+${d.content.scenario}
+
+</div>
+
+</div>
+
+`;
+
+document.getElementById("modalContent").innerHTML=html;
+
+document.getElementById("modal").style.display="block";
+}
+
+function closeModal(){
+
+document.getElementById("modal").style.display="none";
+
+}
+
+function resetProgress(){
+
+if(confirm("Reset all 30-day progress?")){
+
+completed=[];
+
+save();
+
+render();
+
+}
+
+}
+
+document.getElementById("search")
+.addEventListener("input",render);
+
+document.getElementById("weekFilter")
+.addEventListener("change",render);
+
+document.getElementById("modal")
+.addEventListener("click",function(e){
+
+if(e.target===this) closeModal();
+
+});
+
+render();
+
+</script>
+
+</body>
+</html>
