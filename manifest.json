@@ -1,0 +1,10 @@
+{
+  "name": "Nursing Internship – 30 Day Refresher",
+  "short_name": "Nursing 30 Days",
+  "description": "30-Day Nursing Internship Refresher",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#0f172a",
+  "orientation": "portrait"
+}
